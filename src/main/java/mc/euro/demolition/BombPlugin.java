@@ -5,35 +5,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import mc.alk.arena.BattleArena;
-import mc.alk.arena.controllers.BattleArenaController;
-import mc.alk.arena.objects.ArenaPlayer;
-import mc.alk.arena.objects.arenas.Arena;
-import mc.alk.arena.objects.spawns.ItemSpawn;
-import mc.alk.arena.objects.spawns.TimedSpawn;
-import mc.alk.arena.objects.victoryconditions.NoTeamsLeft;
-import mc.alk.arena.objects.victoryconditions.VictoryType;
-import mc.alk.arena.serializers.ArenaSerializer;
-import mc.euro.demolition.appljuze.ConfigManager;
-import mc.euro.demolition.appljuze.CustomConfig;
-import mc.euro.demolition.arenas.BombArena;
-import mc.euro.demolition.arenas.EodArena;
-import mc.euro.demolition.arenas.SndArena;
-import mc.euro.demolition.arenas.factories.BombArenaFactory;
-import mc.euro.demolition.arenas.factories.SndArenaFactory;
-import mc.euro.demolition.commands.EodExecutor;
-import mc.euro.demolition.debug.*;
-import mc.euro.demolition.holograms.HologramInterface;
-import mc.euro.demolition.holograms.HologramsOff;
-import mc.euro.demolition.holograms.HolographicAPI;
-import mc.euro.demolition.holograms.HolographicDisplay;
-import mc.euro.demolition.sound.SoundAdapter;
-import mc.euro.demolition.tracker.PlayerStats;
-import mc.euro.demolition.util.BaseType;
-import mc.euro.version.Version;
-import mc.euro.version.VersionFactory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -46,15 +17,42 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import mc.alk.arena.BattleArena;
+import mc.alk.arena.controllers.APIRegistrationController;
+import mc.alk.arena.controllers.BattleArenaController;
+import mc.alk.arena.objects.ArenaPlayer;
+import mc.alk.arena.objects.arenas.Arena;
+import mc.alk.arena.objects.spawns.ItemSpawn;
+import mc.alk.arena.objects.spawns.TimedSpawn;
+import mc.alk.arena.objects.victoryconditions.NoTeamsLeft;
+import mc.alk.arena.objects.victoryconditions.VictoryType;
+import mc.alk.arena.serializers.ArenaSerializer;
+import mc.alk.arena.util.VersionFactory;
+import mc.alk.arena.util.VersionFactory.Version;
+import mc.euro.demolition.appljuze.ConfigManager;
+import mc.euro.demolition.appljuze.CustomConfig;
+import mc.euro.demolition.arenas.BombArena;
+import mc.euro.demolition.arenas.EodArena;
+import mc.euro.demolition.arenas.SndArena;
+import mc.euro.demolition.arenas.factories.BombArenaFactory;
+import mc.euro.demolition.arenas.factories.SndArenaFactory;
+import mc.euro.demolition.commands.EodExecutor;
+import mc.euro.demolition.debug.DebugInterface;
+import mc.euro.demolition.debug.DebugOff;
+import mc.euro.demolition.debug.DebugOn;
+import mc.euro.demolition.holograms.HologramInterface;
+import mc.euro.demolition.holograms.HologramsOff;
+import mc.euro.demolition.sound.SoundAdapter;
+import mc.euro.demolition.tracker.PlayerStats;
+import mc.euro.demolition.util.BaseType;
+
 /**
  * Bukkit plugin that adds the Demolition game types: Sabotage & Search N Destroy. <br/><br/>
  * 
  * @author Nikolai
  */
 public class BombPlugin extends JavaPlugin {
-    
-    private static final Logger log = Logger.getLogger(BombPlugin.class.getCanonicalName());
-    
+        
     /**
      * Adds Bombs Planted and Bombs Defused to the database. <br/>
      * WLT.WIN = Bomb Planted Successfully (opponents base was destroyed). <br/>
@@ -94,7 +92,6 @@ public class BombPlugin extends JavaPlugin {
     private Material BaseBlock;
     private InventoryType Baseinv;
     private int BaseRadius;
-    private String ChangeFakeName;
     private int MaxDamage;
     private int DeltaDamage;
     private int DamageRadius;
@@ -145,8 +142,10 @@ public class BombPlugin extends JavaPlugin {
             SndArenaFactory.registerCompetition(this, "SndArena", "snd", SndArena.class, new EodExecutor(this));
             BombArenaFactory.registerCompetition(this, "BombArena", "bomb", BombArena.class, new EodExecutor(this));
         } else {
-            BattleArena.registerCompetition(this, "SndArena", "snd", SndArena.class, new EodExecutor(this));
-            BattleArena.registerCompetition(this, "BombArena", "bomb", BombArena.class, new EodExecutor(this));
+            APIRegistrationController.registerCompetition(this, "SndArena", "snd", 
+                    BattleArena.createArenaFactory( SndArena.class ), new EodExecutor(this));
+            APIRegistrationController.registerCompetition(this, "BombArena", "bomb", 
+                    BattleArena.createArenaFactory( BombArena.class ), new EodExecutor(this));
         }
 
         if (StartupDisplay > 0) {
@@ -217,23 +216,24 @@ public class BombPlugin extends JavaPlugin {
         DatabaseTable = getConfig().getString("DatabaseTable", "bombarena");
         GiveCompass = getConfig().getBoolean("GiveCompass", false);
 
-        boolean ShowHolograms = getConfig().getBoolean("ShowHolograms", true);
-        Version HD = VersionFactory.getPluginVersion("HolographicDisplays");
-        Version Holoapi = VersionFactory.getPluginVersion("HoloAPI");
-        debug.log("HolographicDisplays version = " + HD.toString());
-        debug.log("HoloAPI version = " + Holoapi.toString());
-        if (ShowHolograms && HD.isCompatible("1.8.5")) {
-            this.holograms = new HolographicDisplay(this);
-            debug.log("HolographicDisplays support is enabled.");
-        } else if (ShowHolograms && Holoapi.isEnabled()) {
-            this.holograms = new HolographicAPI(this);
-            debug.log("HoloAPI support is enabled.");
-        } else {
-            this.holograms = new HologramsOff();
-            debug.log("Hologram support is disabled.");
-            debug.log("Please download HoloAPI or HolographicDisplays to enable Hologram support.");
-        }
-        
+//        boolean ShowHolograms = getConfig().getBoolean("ShowHolograms", true);
+//        Version<Plugin> HD = VersionFactory.getPluginVersion("HolographicDisplays");
+//        Version<Plugin> Holoapi = VersionFactory.getPluginVersion("HoloAPI");
+//        debug.log("HolographicDisplays version = " + HD.toString());
+//        debug.log("HoloAPI version = " + Holoapi.toString());
+//        
+//        if (ShowHolograms && HD.isCompatible("1.8.5")) {
+//            this.holograms = new HolographicDisplay(this);
+//            debug.log("HolographicDisplays support is enabled.");
+//        } else if (ShowHolograms && Holoapi.isEnabled()) {
+//            this.holograms = new HolographicAPI(this);
+//            debug.log("HoloAPI support is enabled.");
+//        } else {
+//            this.holograms = new HologramsOff();
+//            debug.log("Hologram support is disabled.");
+//            debug.log("Please download HoloAPI or HolographicDisplays to enable Hologram support.");
+//        }
+//        
         try {
             debug.log("PlantTime = " + PlantTime + " seconds");
             debug.log("DefuseTime = " + DefuseTime + " seconds");
@@ -460,12 +460,12 @@ public class BombPlugin extends JavaPlugin {
         cancelAndClearTimers();
         updateConfig();
         updateArenasYml(this.BombBlock);
-        BattleArena.saveArenas(this);
+        ArenaSerializer.saveArenas(this);
     }
 
     private void cancelAndClearTimers() {
         BattleArenaController bc = BattleArena.getBAController();
-        Map<String, Arena> amap = bc.getArenas();
+        Map<String, Arena> amap = BattleArenaController.getAllArenas();
         for (Arena arena : amap.values()) {
             if (arena == null) continue;
             boolean isEodArena = (arena instanceof EodArena);
@@ -539,7 +539,7 @@ public class BombPlugin extends JavaPlugin {
     private void updateArenasYml(Material x) {
         this.debug.log("updating arenas.yml with " + x.name());
         BattleArenaController bc = BattleArena.getBAController();
-        Map<String, Arena> amap = bc.getArenas();
+        Map<String, Arena> amap = BattleArenaController.getAllArenas();
         if (amap.isEmpty()) return;
         for (Arena arena : amap.values()) {
             if (arena.getTimedSpawns() == null) continue;
@@ -570,14 +570,14 @@ public class BombPlugin extends JavaPlugin {
         this.debug.log("updating BombArenaConfig.yml");
         // This needs to be tested.
         BattleArenaController bc = BattleArena.getBAController();
-        Map<String, Arena> amap = bc.getArenas();
+        Map<String, Arena> amap = BattleArenaController.getAllArenas();
         for (Arena arena : amap.values()) {
             if ((arena.getArenaType().getName().equalsIgnoreCase("BombArena")
                     || arena.getArenaType().getName().equalsIgnoreCase("SndArena"))) {
                 String name = arena.getParams().getVictoryType().getName();
                 if (!name.equals("NoTeamsLeft")) {
                     VictoryType type = VictoryType.getType(NoTeamsLeft.class);
-                    arena.getParams().setVictoryCondition(type);
+                    arena.getParams().setVictoryType(type);
                     bc.updateArena(arena);
                     debug.log("The VictoryCondition for BombArena " + arena.getName() + " has been updated to NoTeamsLeft");
                 }
@@ -602,7 +602,7 @@ public class BombPlugin extends JavaPlugin {
             return false;
         }
         BattleArenaController bc = BattleArena.getBAController();
-        Map<String, Arena> amap = bc.getArenas();
+        Map<String, Arena> amap = BattleArenaController.getAllArenas();
         if (amap.isEmpty()) {
             debug.log("Transfer aborted: No arenas found.");
             return false;

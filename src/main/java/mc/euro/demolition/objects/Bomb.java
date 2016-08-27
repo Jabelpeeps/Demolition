@@ -1,8 +1,9 @@
 package mc.euro.demolition.objects;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
-import mc.euro.demolition.BombPlugin;
+
 import org.bukkit.Bukkit;
 import org.bukkit.EntityEffect;
 import org.bukkit.Location;
@@ -16,8 +17,13 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
+
+import mc.euro.demolition.BombPlugin;
 
 /**
  * Bomb.java: Used to trigger a new PlayerDropItemEvent for onBombCarrierDeath().
@@ -260,6 +266,180 @@ import org.bukkit.util.Vector;
     @Override
     public void removeMetadata(String string, Plugin plugin) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setCustomName( String name ) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public String getCustomName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setCustomNameVisible( boolean flag ) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean isCustomNameVisible() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setGlowing( boolean flag ) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean isGlowing() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setInvulnerable( boolean flag ) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean isInvulnerable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isSilent() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setSilent( boolean flag ) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean hasGravity() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setGravity( boolean gravity ) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public Spigot spigot() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void sendMessage( String message ) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void sendMessage( String[] messages ) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean isPermissionSet( String name ) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isPermissionSet( Permission perm ) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean hasPermission( String name ) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean hasPermission( Permission perm ) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public PermissionAttachment addAttachment( Plugin plugin, String name, boolean value ) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public PermissionAttachment addAttachment( Plugin plugin ) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public PermissionAttachment addAttachment( Plugin plugin, String name, boolean value, int ticks ) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public PermissionAttachment addAttachment( Plugin plugin, int ticks ) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void removeAttachment( PermissionAttachment attachment ) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void recalculatePermissions() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public Set<PermissionAttachmentInfo> getEffectivePermissions() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean isOp() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setOp( boolean value ) {
+        // TODO Auto-generated method stub
+        
     }
     
 }

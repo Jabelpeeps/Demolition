@@ -8,14 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import mc.alk.arena.objects.events.ArenaEventHandler;
-import mc.alk.arena.objects.spawns.TimedSpawn;
-import mc.alk.arena.objects.teams.ArenaTeam;
-import mc.alk.arena.util.SerializerUtil;
-import mc.euro.demolition.BombPlugin;
-import mc.euro.demolition.objects.CompassHandler;
-import mc.euro.demolition.timers.DetonationTimer;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -23,6 +15,14 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
+
+import mc.alk.arena.objects.events.ArenaEventHandler;
+import mc.alk.arena.objects.spawns.TimedSpawn;
+import mc.alk.arena.objects.teams.ArenaTeam;
+import mc.alk.arena.util.SerializerUtil;
+import mc.euro.demolition.BombPlugin;
+import mc.euro.demolition.objects.CompassHandler;
+import mc.euro.demolition.timers.DetonationTimer;
 
 /**
  * SndArena = Search N Destroy game-mode from Call of Duty & Counterstrike.
@@ -214,7 +214,7 @@ public class SndArena extends EodArena {
     public void onStart() {
         super.onStart();
         // loadLocations();
-        int matchID = getMatch().getID();
+        int matchID = getMatch().getId();
         plugin.debug.log("onStart matchID = " + matchID);
         this.carrier = null;
         resetBases();

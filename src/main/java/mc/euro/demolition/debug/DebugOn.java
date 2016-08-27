@@ -1,9 +1,11 @@
 package mc.euro.demolition.debug;
 
 import java.util.Set;
-import mc.alk.arena.objects.ArenaPlayer;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import mc.alk.arena.objects.ArenaPlayer;
 
 /**
  * debug = new DebugOn(); will toggle debugging mode ON.
@@ -13,7 +15,7 @@ public class DebugOn implements DebugInterface {
     Plugin plugin;
     
     public DebugOn(Plugin reference) {
-        this.plugin = reference;
+        plugin = reference;
     }
 
     @Override
@@ -32,6 +34,4 @@ public class DebugOn implements DebugInterface {
             p.sendMessage(msg);
         }
     }
-
-
 }

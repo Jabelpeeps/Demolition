@@ -8,22 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
-import mc.alk.arena.events.matches.MatchStartEvent;
-import mc.alk.arena.events.players.ArenaPlayerLeaveEvent;
-import mc.alk.arena.events.teams.TeamDeathEvent;
-import mc.alk.arena.objects.ArenaPlayer;
-import mc.alk.arena.objects.MatchResult;
-import mc.alk.arena.objects.arenas.Arena;
-import mc.alk.arena.objects.events.ArenaEventHandler;
-import mc.alk.arena.objects.events.EventPriority;
-import mc.alk.arena.objects.spawns.TimedSpawn;
-import mc.alk.arena.objects.teams.ArenaTeam;
-import mc.alk.arena.serializers.Persist;
-import mc.euro.demolition.BombPlugin;
-import mc.euro.demolition.objects.CompassHandler;
-import mc.euro.demolition.timers.DefuseTimer;
-import mc.euro.demolition.timers.DetonationTimer;
-import mc.euro.demolition.timers.PlantTimer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -48,6 +33,23 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+
+import mc.alk.arena.events.matches.MatchStartEvent;
+import mc.alk.arena.events.players.ArenaPlayerLeaveEvent;
+import mc.alk.arena.events.teams.TeamDeathEvent;
+import mc.alk.arena.objects.ArenaPlayer;
+import mc.alk.arena.objects.MatchResult;
+import mc.alk.arena.objects.arenas.Arena;
+import mc.alk.arena.objects.events.ArenaEventHandler;
+import mc.alk.arena.objects.events.ArenaEventPriority;
+import mc.alk.arena.objects.spawns.TimedSpawn;
+import mc.alk.arena.objects.teams.ArenaTeam;
+import mc.alk.arena.serializers.Persist;
+import mc.euro.demolition.BombPlugin;
+import mc.euro.demolition.objects.CompassHandler;
+import mc.euro.demolition.timers.DefuseTimer;
+import mc.euro.demolition.timers.DetonationTimer;
+import mc.euro.demolition.timers.PlantTimer;
 
 /**
  * EOD = Explosive Ordnance Disposal. <br/><br/>
@@ -277,7 +279,7 @@ public abstract class EodArena extends Arena {
      * 
      * @param e BlockBreakEvent - Is it the base block ?
      */
-    @ArenaEventHandler (priority=EventPriority.HIGHEST)
+    @ArenaEventHandler (priority=ArenaEventPriority.HIGHEST)
     public void onBaseExploit(BlockBreakEvent e) {
         // close the exploit where players can destroy the BaseBlock.
         // EXIT CONDITION:
@@ -323,7 +325,7 @@ public abstract class EodArena extends Arena {
     /**
      * Is WorldGuard denying bomb plants ?
      */
-    @ArenaEventHandler (priority=EventPriority.HIGHEST)
+    @ArenaEventHandler (priority=ArenaEventPriority.HIGHEST)
     public void onBaseInteraction(PlayerInteractEvent e) {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (e.getClickedBlock().getType() != plugin.getBaseBlock()) return;
@@ -345,7 +347,7 @@ public abstract class EodArena extends Arena {
      * 
      * @param e InventoryOpenEvent - Is it an actual Base Inventory ? (Each team must have a base).
      */
-    @ArenaEventHandler (priority=EventPriority.HIGHEST)
+    @ArenaEventHandler (priority=ArenaEventPriority.HIGHEST)
     public void onBombPlantDefuse(InventoryOpenEvent e) {        
         // EXIT CONDITIONS:
         if (e.getInventory().getType() != plugin.getBaseinv()) return;
@@ -397,7 +399,7 @@ public abstract class EodArena extends Arena {
      *
      * @param e InventoryCloseEvent
      */
-    @ArenaEventHandler(priority = EventPriority.HIGHEST)
+    @ArenaEventHandler(priority = ArenaEventPriority.HIGHEST)
     public void onBombPlantDefuseFailure(InventoryCloseEvent e) {
         Player p = (Player) e.getPlayer();
         String type = e.getInventory().getType().toString();
@@ -629,7 +631,7 @@ public abstract class EodArena extends Arena {
     @Override
     public void onComplete() {
         super.onComplete();
-        int matchID = getMatch().getID();
+        int matchID = getMatch().getId();
         plugin.debug.log("onComplete matchID = " + matchID);
 //        Set<ArenaPlayer> allplayers = getMatch().getPlayers();
 //        for (ArenaPlayer p : allplayers) {
@@ -664,7 +666,7 @@ public abstract class EodArena extends Arena {
     @Override
     public void onFinish() {
         super.onFinish();
-        int matchID = getMatch().getID();
+        int matchID = getMatch().getId();
         plugin.debug.log("onFinish matchID = " + matchID);
         cancelAndClearTimers();
         removeHolograms();

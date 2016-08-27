@@ -1,17 +1,15 @@
 package mc.euro.demolition.timers;
 
-import java.util.Map;
-import mc.alk.arena.competition.match.Match;
-import mc.alk.arena.objects.arenas.Arena;
-import mc.alk.arena.objects.teams.ArenaTeam;
-import mc.euro.demolition.BombPlugin;
-import mc.euro.demolition.arenas.EodArena;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import mc.alk.arena.objects.teams.ArenaTeam;
+import mc.euro.demolition.BombPlugin;
+import mc.euro.demolition.arenas.EodArena;
 
 /**
  * Example: new DefuseTimer(InventoryOpenEvent e, getMatch()). <br/><br/>

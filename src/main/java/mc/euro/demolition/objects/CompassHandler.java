@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import mc.alk.arena.objects.ArenaPlayer;
-import mc.alk.arena.objects.arenas.Arena;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import mc.alk.arena.objects.ArenaPlayer;
+import mc.alk.arena.objects.arenas.Arena;
 
 /**
  * Continually update players compass to a new Location every X ticks. <br/><br/>
@@ -22,7 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class CompassHandler extends BukkitRunnable {
     
     Arena arena;
-    Collection<Location> locations = new HashSet<Location>();
+    Collection<Location> locations = new HashSet<>();
     
     /**
      * Ideally, I would have liked this constructor to accept just a list of players.
@@ -62,7 +63,7 @@ public class CompassHandler extends BukkitRunnable {
     }
     
     public void pointTo(Location loc) {
-        List<Location> list = new ArrayList<Location>();
+        List<Location> list = new ArrayList<>();
         if (loc != null) list.add(loc);
         pointTo(list);
     }

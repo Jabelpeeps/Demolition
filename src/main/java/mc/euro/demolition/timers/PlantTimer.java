@@ -2,20 +2,17 @@ package mc.euro.demolition.timers;
 
 import java.util.Set;
 
-import mc.alk.arena.competition.match.Match;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import mc.alk.arena.objects.ArenaPlayer;
 import mc.euro.demolition.BombPlugin;
 import mc.euro.demolition.arenas.EodArena;
 import mc.euro.demolition.util.MatchUtil;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Example: new PlantTimer(InventoryOpenEvent e, getMatch()). <br/><br/>

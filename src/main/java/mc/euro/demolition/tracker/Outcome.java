@@ -1,6 +1,6 @@
 package mc.euro.demolition.tracker;
 
-import mc.alk.tracker.objects.WLT;
+import mc.alk.arena.objects.tracker.WLTRecord.WLT;
 
 /**
  * This class defines wins, losses, and ties. <br/><br/>

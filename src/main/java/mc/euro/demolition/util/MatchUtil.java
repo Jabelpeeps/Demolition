@@ -2,13 +2,11 @@ package mc.euro.demolition.util;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import mc.alk.arena.competition.match.Match;
+import mc.alk.arena.competition.Match;
 import mc.alk.arena.objects.victoryconditions.TimeLimit;
-import mc.alk.arena.objects.victoryconditions.VictoryCondition;
 import mc.alk.arena.util.Countdown;
+import mc.alk.arena.util.Log;
 
 /**
  * 
@@ -27,8 +25,8 @@ public class MatchUtil {
             
             Field vcsField = match.getClass().getSuperclass().getDeclaredField("vcs");
             vcsField.setAccessible(true);
-            List<VictoryCondition> vcs = (List) vcsField.get(match);
-            for (VictoryCondition vc : vcs) {
+            List<?> vcs = (List<?>) vcsField.get(match);
+            for ( Object vc : vcs ) {
                 if (vc instanceof TimeLimit) {
                     Field timerField = vc.getClass().getDeclaredField("timer");
                     timerField.setAccessible(true);
@@ -38,26 +36,16 @@ public class MatchUtil {
                     secondsField.set(timer, time);
                 }
             }
-        } catch (NoSuchFieldException ex) {
-            Logger.getLogger(MatchUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(MatchUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(MatchUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(MatchUtil.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch ( NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex)  {
+            Log.err( MatchUtil.class.getName() + ex.getStackTrace() );        
+        } 
     }
     
-    public static void continueMatchOnExpiration(Match match) {
-        setCancelOnExpire(match, false);
-    }
+    public static void continueMatchOnExpiration( Match match ) { setCancelOnExpire( match, false ); }
     
-    public static void stopMatchOnExpiration(Match match) {
-        setCancelOnExpire(match, true);
-    }
+    public static void stopMatchOnExpiration( Match match ) { setCancelOnExpire( match, true ); }
     
-    public static void setCancelOnExpire(Match match, boolean cancel) {
+    public static void setCancelOnExpire( Match match, boolean cancel ) {
         try {
             Field mc = match.getClass().getSuperclass().getDeclaredField("matchCountdown");
             mc.setAccessible(true);
@@ -66,8 +54,8 @@ public class MatchUtil {
             
             Field vcsField = match.getClass().getSuperclass().getDeclaredField("vcs");
             vcsField.setAccessible(true);
-            List<VictoryCondition> vcs = (List) vcsField.get(match);
-            for (VictoryCondition vc : vcs) {
+            List<?> vcs = (List<?>) vcsField.get(match);
+            for ( Object vc : vcs ) {
                 if (vc instanceof TimeLimit) {
                     Field timerField = vc.getClass().getDeclaredField("timer");
                     timerField.setAccessible(true);
@@ -75,15 +63,8 @@ public class MatchUtil {
                     timer.setCancelOnExpire(cancel);
                 }
             }
-        } catch (NoSuchFieldException ex) {
-            Logger.getLogger(MatchUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(MatchUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(MatchUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(MatchUtil.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch ( NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex)  {
+            Log.err( MatchUtil.class.getName() + ex.getStackTrace() );        
+        } 
     }
-
 }
